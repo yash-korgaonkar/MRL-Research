@@ -24,13 +24,14 @@ React Native (Expo) app for patients to monitor tremor and run self-administered
    - In Firestore, create composite indexes (if prompted by the app):
      - Collection `tremorEvents`: fields `userId` (Ascending), `timestamp` (Descending).
      - Collection `bradyTests`: fields `userId` (Ascending), `timestamp` (Descending).
-   - Add a web app and copy the config. Create a `.env` (or use `app.config.js` with `extra`) with:
+   - Add a web app and copy the config. Put the values in a `.env` file. The app loads `.env` from **parkinsons-app/** or from the repo root (**MRL-Research/**), so either location works. Required variables:
      - `EXPO_PUBLIC_FIREBASE_API_KEY`
      - `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN`
      - `EXPO_PUBLIC_FIREBASE_PROJECT_ID`
      - `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET`
      - `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
      - `EXPO_PUBLIC_FIREBASE_APP_ID`
+   - Firebase is initialized in `src/firebase/config.js` (single source of truth); `src/services/firebase.service.ts` uses that instance for auth and Firestore.
 
 3. **BLE (Pi contract)**
 
