@@ -63,11 +63,6 @@ export default function LiveTremorCard({ reading, isStreaming }: LiveTremorCardP
                         value={reading.rms.toFixed(2)}
                         active={isTremor}
                     />
-                    <MetricItem
-                        label="Probability"
-                        value={`${(reading.p * 100).toFixed(0)}%`}
-                        active={isTremor}
-                    />
                 </View>
             )}
         </View>

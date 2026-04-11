@@ -9,6 +9,8 @@ import { getRecentTremorEvents } from '../../services/tremor.service';
 import { Colors, severityColor } from '../../theme/colors';
 import { formatDateTime, formatDuration } from '../../utils/time';
 import { Ionicons } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Sharing from 'expo-sharing';
 
 type Nav = StackNavigationProp<TremorStackParamList, 'TremorHistory'>;
 
@@ -58,6 +60,28 @@ export default function TremorHistoryScreen() {
         }
     };
 
+    const exportData = async () => {
+        try {
+            if (events.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            const fileUri = FileSystem.documentDirectory + 'tremor_history.json';
+            await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(events, null, 2));
+
+            const isAvailable = await Sharing.isAvailableAsync();
+            if (isAvailable) {
+                await Sharing.shareAsync(fileUri);
+            } else {
+                alert('Sharing is not available on this device');
+            }
+        } catch (error) {
+            console.error('Failed to export data:', error);
+            alert('Failed to export data');
+        }
+    };
+
     const renderItem = ({ item }: { item: TremorEvent }) => (
         <TouchableOpacity
             className="bg-surface rounded-2xl p-4 mb-3"
@@ -101,18 +125,30 @@ export default function TremorHistoryScreen() {
 
     return (
         <View className="flex-1 bg-primary">
-            {/* Trends button */}
-            <TouchableOpacity
-                className="flex-row items-center bg-surface mx-4 mt-3 mb-2 rounded-xl p-3"
-                onPress={() => navigation.navigate('TremorTrends')}
-                activeOpacity={0.7}
-            >
-                <Ionicons name="trending-up" size={20} color={Colors.accent} />
-                <Text className="text-accent text-sm font-semibold ml-2 flex-1">
-                    View Trends & Charts
-                </Text>
-                <Ionicons name="chevron-forward" size={16} color={Colors.textSecondary} />
-            </TouchableOpacity>
+            {/* Top actions */}
+            <View className="flex-row mx-4 mt-3 mb-2 justify-between">
+                <TouchableOpacity
+                    className="flex-row items-center bg-surface rounded-xl p-3 flex-1 mr-2"
+                    onPress={() => navigation.navigate('TremorTrends')}
+                    activeOpacity={0.7}
+                >
+                    <Ionicons name="trending-up" size={20} color={Colors.accent} />
+                    <Text className="text-accent text-sm font-semibold ml-2 flex-1">
+                        Trends & Charts
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    className="flex-row items-center bg-surface rounded-xl p-3 flex-1 ml-2"
+                    onPress={exportData}
+                    activeOpacity={0.7}
+                >
+                    <Ionicons name="download-outline" size={20} color={Colors.success} />
+                    <Text className="text-success text-sm font-semibold ml-2 flex-1">
+                        Export Data
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
             <FlatList
                 data={events}
