@@ -10,7 +10,7 @@ A Raspberry Pi bridge writes live tremor readings (frequency, RMS amplitude, sev
 - **Tremor history and trends:** event log, trend charts over time, and JSON export to share with a clinician
 - **Bradykinesia tests:** single-tap, alternating-tap, and fine-motor tapping tests
 - **Motor feature extraction:** tap frequency, inter-tap interval variance, and fatigue slope computed per 30-second segment and compared to a personal baseline
-- **Accounts and privacy:** Firebase Authentication with Google and Apple sign-in, device pairing, and privacy settings
+- **Accounts and privacy:** Firebase Authentication, device pairing, and privacy settings
 
 ## Stack
 
